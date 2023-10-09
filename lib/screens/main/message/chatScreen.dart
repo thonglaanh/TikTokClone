@@ -12,7 +12,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return const Scaffold(
       body: Center(
-        child: Text('For you screen'),
+        child: Text('Message'),
       ),
     );
   }

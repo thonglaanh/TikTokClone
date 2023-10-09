@@ -42,10 +42,7 @@ class _IntroduceScreenState extends State<IntroduceScreen> {
             ),
             _buildLoginButton(Icons.phone, 'Login with phone number', () {}),
             _buildLoginButton(Icons.email, 'Login with email', () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
+              Get.to(const LoginScreen());
             }),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -53,10 +50,7 @@ class _IntroduceScreenState extends State<IntroduceScreen> {
                 const Text("You don't have an account? "),
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegisterScreen()));
+                    Get.to(const RegisterScreen());
                   },
                   child: const Text(
                     'Register',

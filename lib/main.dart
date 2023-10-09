@@ -1,10 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:tiktok/screens/auth/introduceScreen.dart';
-import 'package:tiktok/screens/home/homeScreen.dart';
+import 'package:get/get.dart';
+import 'package:tiktok/screens/main/mainScreen.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); //Check ứng dụng hoạt động đúng
+  // Khởi tạo cấu hình cung cập cho firebase
   await Firebase.initializeApp(
     options: const FirebaseOptions(
       apiKey: "AIzaSyBLcY5QP8t113KiaGiZSMhhBw9rQmRV-8s",
@@ -13,18 +16,24 @@ void main() async {
       projectId: "tiktokclone-ed7f0",
     ),
   );
-  runApp(const MyApp());
+  //FlutterSecureStorage : Kiểu localStorage
+  const storage = FlutterSecureStorage();
+  String? UID = await storage.read(key: 'uID');
+  runApp(MyApp(UID: UID));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final String? UID;
+
+  const MyApp({Key? key, this.UID}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return GetMaterialApp(
       title: 'Tiktok Clone',
       debugShowCheckedModeBanner: false,
-      home: IntroduceScreen(),
+      theme: ThemeData(primaryColor: Colors.white),
+      home: UID != null ? const MainScreen() : const IntroduceScreen(),
     );
   }
 }

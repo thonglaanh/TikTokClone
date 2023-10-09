@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:tiktok/screens/home/following/followingScreen.dart';
-import 'package:tiktok/screens/home/foryou/forYouScreen.dart';
-import 'package:tiktok/screens/home/message/chatScreen.dart';
-import 'package:tiktok/screens/home/profile/profileScreen.dart';
-import 'package:tiktok/screens/home/upload_video/uploadVideoScreen.dart';
+import 'package:tiktok/screens/main/home/homeScreen.dart';
+import 'package:tiktok/screens/main/message/chatScreen.dart';
+import 'package:tiktok/screens/main/profile/profileScreen.dart';
+import 'package:tiktok/screens/main/upload_video/uploadVideoScreen.dart';
 import 'package:tiktok/widgets/uploadCustomIcon.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _MainScreenState extends State<MainScreen> {
   int screenIndex = 0;
   List screenList = [
-    const ForYouScreen(),
+    const HomeScreen(),
     const ChatScreen(),
     const UploadVideoScreen(),
     const FollowingScreen(),
@@ -37,18 +36,20 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.black,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white54,
+        selectedLabelStyle: const TextStyle(fontSize: 10),
+        unselectedLabelStyle: const TextStyle(fontSize: 10),
         currentIndex: screenIndex,
         items: const [
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.home,
-                size: 30,
+                size: 25,
               ),
               label: "Home"),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.message,
-              size: 30,
+              size: 25,
             ),
             label: "Message",
           ),
@@ -56,15 +57,16 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.inbox_sharp,
-                size: 30,
+                size: 25,
               ),
               label: "Following"),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-                size: 30,
-              ),
-              label: "Me"),
+            icon: Icon(
+              Icons.person,
+              size: 25,
+            ),
+            label: "Me",
+          ),
         ],
       ),
       body: screenList[screenIndex],

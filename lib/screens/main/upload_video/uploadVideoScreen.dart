@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tiktok/screens/auth/loginScreen.dart';
-import 'package:tiktok/screens/home/upload_video/uploadForm.dart';
+import 'package:tiktok/screens/main/upload_video/uploadForm.dart';
 
 class UploadVideoScreen extends StatefulWidget {
   const UploadVideoScreen({super.key});
@@ -21,7 +20,6 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
         videoFile: File(videoFile.path),
         videoPath: videoFile.path,
       ));
-      
     }
   }
 
@@ -38,10 +36,10 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
               children: [
                 Icon(Icons.library_add),
                 Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.fromLTRB(12, 8, 5, 8),
                     child: Text(
                       "Get video from Gallery",
-                      style: TextStyle(fontSize: 17),
+                      style: TextStyle(fontSize: 15),
                     ))
               ],
             ),
@@ -54,10 +52,10 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
               children: [
                 Icon(Icons.camera),
                 Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.fromLTRB(12, 8, 5, 8),
                     child: Text(
-                      "Make video with your camera",
-                      style: TextStyle(fontSize: 17),
+                      " Video for your camera",
+                      style: TextStyle(fontSize: 15),
                     ))
               ],
             ),
@@ -70,10 +68,10 @@ class _UploadVideoScreenState extends State<UploadVideoScreen> {
               children: [
                 Icon(Icons.image),
                 Padding(
-                    padding: EdgeInsets.all(8),
+                    padding: EdgeInsets.fromLTRB(12, 8, 5, 8),
                     child: Text(
                       "Cancel",
-                      style: TextStyle(fontSize: 17),
+                      style: TextStyle(fontSize: 15),
                     ))
               ],
             ),

@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktok/database/models/user.modal.dart' as UserModel;
 import 'package:tiktok/screens/auth/loginScreen.dart';
-import 'package:tiktok/screens/home/homeScreen.dart';
+import 'package:tiktok/screens/main/mainScreen.dart';
 import 'package:tiktok/widgets/snackbar.dart';
 
 class AuthenticationController extends GetxController {
@@ -60,29 +61,35 @@ class AuthenticationController extends GetxController {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      getSnackBar("Success", "Login successfully!", Colors.green).show(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
+
+      // Lấy người dùng hiện tại sau khi đăng nhập thành công
+      final user = FirebaseAuth.instance.currentUser;
+      const storage = FlutterSecureStorage();
+      if (user != null) {
+        String? uID = user.uid;
+        await storage.write(key: 'uID', value: uID);
+      }
+      await getSnackBar("Success", "Login successfully!", Colors.green)
+          .show(context);
+      Get.to(const MainScreen());
     } catch (e) {
       getSnackBar("Failed", "Login Failed!", Colors.red).show(context);
     }
   }
 
-  // goToScreen(User? currentUser) {
-  //   if (currentUser == null) {
-  //     Get.offAll(const LoginScreen());
-  //   } else {
-  //     Get.offAll(const HomeScreen());
-  //   }
-  // }
+  goToScreen(User? currentUser) {
+    if (currentUser == null) {
+      Get.offAll(const LoginScreen());
+    } else {
+      Get.offAll(const MainScreen());
+    }
+  }
 
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //   _currentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
-  //   _currentUser.bindStream(FirebaseAuth.instance.authStateChanges());
-  //   ever(_currentUser, goToScreen);
-  // }
+  @override
+  void onReady() {
+    super.onReady();
+    _currentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
+    _currentUser.bindStream(FirebaseAuth.instance.authStateChanges());
+    ever(_currentUser, goToScreen);
+  }
 }

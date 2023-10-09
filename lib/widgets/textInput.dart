@@ -20,12 +20,12 @@ class TextInputWidget extends StatelessWidget {
     return TextField(
       controller: textEditingController,
       decoration: InputDecoration(
+        labelText: lableString,
+        prefixIcon: Icon(iconData), // Icon phía trước
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5),
-        ),
-        labelText: lableString,
-        prefixIcon: Icon(
-          iconData,
         ),
       ),
       obscureText: isObscure, //Ẩn password
