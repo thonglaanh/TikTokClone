@@ -7,6 +7,7 @@ import 'package:tiktok/screens/main/mainScreen.dart';
 import 'package:tiktok/widgets/snackbar.dart';
 
 class UserService {
+  //Lấy user ra từ id của user trong FlutterSecureStorage
   static Future getUserInfo() async {
     final CollectionReference users =
         FirebaseFirestore.instance.collection('users');
@@ -24,6 +25,7 @@ class UserService {
       required fullName,
       required email}) async {
     try {
+      //Sửa user từ id user trong FlutterSecureStorage
       CollectionReference users =
           FirebaseFirestore.instance.collection('users');
       const storage = FlutterSecureStorage();

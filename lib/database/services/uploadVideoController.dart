@@ -5,9 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:tiktok/database/models/video.model.dart';
 import 'package:tiktok/screens/main/mainScreen.dart';
+import 'package:tiktok/widgets/snackbar.dart';
 import 'package:video_compress/video_compress.dart';
 
 class UploadVideoController extends GetxController {
+  //Lấy hình ảnh thu nhỏ của video
+  getThumnailImage(String videoFilePath) async {
+    final thumbnailImage = await VideoCompress.getFileThumbnail(videoFilePath);
+    return thumbnailImage;
+  }
+
+  //Nén video lại
   compressVideoFile(String videoFilePath) async {
     final compressVideoFilePath = await VideoCompress.compressVideo(
         videoFilePath,
@@ -15,23 +23,7 @@ class UploadVideoController extends GetxController {
     return compressVideoFilePath!.file;
   }
 
-  uploadCompressedVideoImageToFirebaseStorage(
-      String videoID, String videoFilePath) async {
-    UploadTask videoUploadTask = FirebaseStorage.instance
-        .ref()
-        .child("All videos")
-        .child(videoID)
-        .putFile(await compressVideoFile(videoFilePath));
-    TaskSnapshot snapshot = await videoUploadTask;
-    String downloadUrlOfUploadVideo = await snapshot.ref.getDownloadURL();
-    return downloadUrlOfUploadVideo;
-  }
-
-  getThumnailImage(String videFilePath) async {
-    final thumbnailImage = await VideoCompress.getFileThumbnail(videFilePath);
-    return thumbnailImage;
-  }
-
+  //Tải hình ảnh thu nhỏ của video lên firebase
   uploadThumnailImageToFirebaseStorage(
       String videoID, String videoFilePath) async {
     UploadTask thumbnailUploadTask = FirebaseStorage.instance
@@ -44,6 +36,20 @@ class UploadVideoController extends GetxController {
     return downloadUrlOfUploadVideo;
   }
 
+  //Tải video đã nén lên firebase
+  uploadCompressedVideoImageToFirebaseStorage(
+      String videoID, String videoFilePath) async {
+    UploadTask videoUploadTask = FirebaseStorage.instance
+        .ref()
+        .child("All videos")
+        .child(videoID)
+        .putFile(await compressVideoFile(videoFilePath));
+    TaskSnapshot snapshot = await videoUploadTask;
+    String downloadUrlOfUploadVideo = await snapshot.ref.getDownloadURL();
+    return downloadUrlOfUploadVideo; //Trả về đường dẫn tải video
+  }
+
+  //Tạo đối tượng video và lưu vào firebase
   saveVideoInfomationToFirebase(String artistSongName, String descriptionTags,
       String videoFilePath, BuildContext context) async {
     try {
@@ -56,25 +62,25 @@ class UploadVideoController extends GetxController {
       String videoDownloadUrl =
           await uploadCompressedVideoImageToFirebaseStorage(
               videoId, videoFilePath);
-// Thumbnail to Firebase
+      // Thumbnail to Firebase
       String thumbnailDownloadUrl =
           await uploadThumnailImageToFirebaseStorage(videoId, videoFilePath);
-
-// Rest of your code...
 
       //upload
       Video videoObj = Video(
         userId: FirebaseAuth.instance.currentUser!.uid,
         userName:
             (userDocumentSnapshot.data() as Map<String, dynamic>)["fullName"],
+        userAvatar:
+            (userDocumentSnapshot.data() as Map<String, dynamic>)["avatarURL"],
         videoId: videoId,
         totalShares: 0,
         totalComments: 0,
         likesList: [],
         artistSongName: artistSongName,
         descriptionTags: descriptionTags,
-        thumbnailUrl: videoDownloadUrl,
-        videoUrl: thumbnailDownloadUrl,
+        thumbnailUrl: thumbnailDownloadUrl,
+        videoUrl: videoDownloadUrl,
         publishedDateTime: DateTime.now().microsecondsSinceEpoch,
       );
       await FirebaseFirestore.instance
@@ -82,7 +88,9 @@ class UploadVideoController extends GetxController {
           .doc(videoId)
           .set(videoObj.toJson());
 
-      Get.snackbar("Upload video success", "Your video upload to Firebase.");
+      await getSnackBar('Success', "Upload video thành công", Colors.green)
+          .show(context);
+      Get.to(const MainScreen());
     } catch (e) {
       Get.snackbar(
           "Upload video failed", "Your video not upload to Firebase.Try Again");

@@ -32,7 +32,8 @@ class AuthenticationController extends GetxController {
       BuildContext context) async {
     try {
       UserCredential credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(email: email, password: password);
+          .createUserWithEmailAndPassword(
+              email: email, password: password); //Tạo tài khoản với email,pass
       UserModel.UserModel userModel = UserModel.UserModel(
           gender: 'none',
           email: email,
@@ -48,7 +49,7 @@ class AuthenticationController extends GetxController {
       await FirebaseFirestore.instance
           .collection("users")
           .doc(credential.user!.uid)
-          .set(userModel.toJson());
+          .set(userModel.toJson()); //Lưu dữ liệu vào firestore
       getSnackBar("Success", "Register successfully!", Colors.green)
           .show(context);
     } catch (e) {
@@ -59,10 +60,11 @@ class AuthenticationController extends GetxController {
   void loginForEmail(
       String email, String password, BuildContext context) async {
     try {
+      //Đăng nhấp
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
 
-      // Lấy người dùng hiện tại sau khi đăng nhập thành công
+      // Lấy người dùng ra và lưu vào FlutterSecureStorage
       final user = FirebaseAuth.instance.currentUser;
       const storage = FlutterSecureStorage();
       if (user != null) {
@@ -77,19 +79,19 @@ class AuthenticationController extends GetxController {
     }
   }
 
-  goToScreen(User? currentUser) {
-    if (currentUser == null) {
-      Get.offAll(const LoginScreen());
-    } else {
-      Get.offAll(const MainScreen());
-    }
-  }
+  // goToScreen(User? currentUser) {
+  //   if (currentUser == null) {
+  //     Get.offAll(const LoginScreen());
+  //   } else {
+  //     Get.offAll(const MainScreen());
+  //   }
+  // }
 
-  @override
-  void onReady() {
-    super.onReady();
-    _currentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
-    _currentUser.bindStream(FirebaseAuth.instance.authStateChanges());
-    ever(_currentUser, goToScreen);
-  }
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   _currentUser = Rx<User?>(FirebaseAuth.instance.currentUser);
+  //   _currentUser.bindStream(FirebaseAuth.instance.authStateChanges());
+  //   ever(_currentUser, goToScreen);
+  // }
 }

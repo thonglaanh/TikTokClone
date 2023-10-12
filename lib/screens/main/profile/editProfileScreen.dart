@@ -98,7 +98,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       height: 40,
                     ),
                     const Text(
-                      'Giới thiệt về bản thân',
+                      'Giới thiệu về bản thân',
                       style:
                           TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                     ),

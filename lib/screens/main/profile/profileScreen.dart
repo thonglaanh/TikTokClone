@@ -62,8 +62,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ClipRRect(
                             borderRadius: BorderRadius.circular(50),
                             child: Image.asset(
-                              // '${snapshot.data.get('avatarURL')}',
-                              'images/tik-tok.png',
+                              '${snapshot.data.get('avatarURL')}',
+                              // 'images/tik-tok.png',
                               height: 100,
                               width: 100.0,
                               fit: BoxFit.cover,
